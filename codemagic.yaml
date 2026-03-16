@@ -3,16 +3,19 @@ workflows:
     name: MajestyOS Build
     instance_type: mac_mini_m1
     scripts:
-      - name: Extract project and build
+      - name: Find and Build MajestyOS
         script: | 
-          # Розпаковуємо ваш архів (назва має збігатися з файлом на GitHub)
+          # 1. Розпаковуємо все
           unzip *.zip
           
-          # Заходимо в папку, яка з'явилася після розпакування
-          # Якщо папка називається інакше, Codemagic спробує її знайти
-          cd $(find . -maxdepth 1 -type d -not -path '*/.*' | tail -n 1)
+          # 2. Шукаємо, де лежить файл gradlew (він головний)
+          GRADLEW_PATH=$(find . -name gradlew)
+          GRADLEW_DIR=$(dirname "$GRADLEW_PATH")
           
-          # Даємо права на запуск і збираємо APK
+          # 3. Переходимо в ту папку
+          cd "$GRADLEW_DIR"
+          
+          # 4. Даємо права і запускаємо збірку
           chmod +x gradlew
           ./gradlew assembleDebug
     artifacts:
