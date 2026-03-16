@@ -1,0 +1,11 @@
+workflows:
+  android-build:
+    name: MajestyOS Build
+    instance_type: mac_mini_m1
+    scripts:
+      - name: Build APK
+        script: | 
+          ./gradlew assembleDebug
+    artifacts:
+      - app/build/outputs/apk/**/*.apk
+      
