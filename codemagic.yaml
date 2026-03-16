@@ -3,9 +3,18 @@ workflows:
     name: MajestyOS Build
     instance_type: mac_mini_m1
     scripts:
-      - name: Build APK
+      - name: Extract project and build
         script: | 
+          # Розпаковуємо ваш архів (назва має збігатися з файлом на GitHub)
+          unzip *.zip
+          
+          # Заходимо в папку, яка з'явилася після розпакування
+          # Якщо папка називається інакше, Codemagic спробує її знайти
+          cd $(find . -maxdepth 1 -type d -not -path '*/.*' | tail -n 1)
+          
+          # Даємо права на запуск і збираємо APK
+          chmod +x gradlew
           ./gradlew assembleDebug
     artifacts:
-      - app/build/outputs/apk/**/*.apk
+      - "**/build/outputs/apk/**/*.apk"
       
