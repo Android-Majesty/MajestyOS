@@ -5,17 +5,17 @@ workflows:
     scripts:
       - name: Find and Build MajestyOS
         script: | 
-          # 1. Розпаковуємо все
+          # 1. Розпаковуємо архів
           unzip *.zip
           
-          # 2. Шукаємо, де лежить файл gradlew (він головний)
-          GRADLEW_PATH=$(find . -name gradlew)
-          GRADLEW_DIR=$(dirname "$GRADLEW_PATH")
+          # 2. Знаходимо ПАПКУ, де лежить gradlew
+          GRADLEW_FILE=$(find . -name gradlew | head -n 1)
+          PROJECT_ROOT=$(dirname "$GRADLEW_FILE")
           
-          # 3. Переходимо в ту папку
-          cd "$GRADLEW_DIR"
+          echo "Проект знайдено в: $PROJECT_ROOT"
+          cd "$PROJECT_ROOT"
           
-          # 4. Даємо права і запускаємо збірку
+          # 3. Даємо права і запускаємо
           chmod +x gradlew
           ./gradlew assembleDebug
     artifacts:
